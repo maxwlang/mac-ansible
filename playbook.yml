@@ -1,0 +1,80 @@
+- hosts: localhost
+  connection: local
+
+  vars_files:
+    - settings.yml
+
+  tasks:
+    # Setup
+    - name: Determine Mac machine type
+      set_fact:
+        is_apple_silicon: "{{ ansible_machine == 'arm64' }}"
+
+    - name: Print machine type
+      debug:
+        msg: "Machine type is {{ ansible_machine }}"
+
+    # Apple Silicon compatibility
+    - name: Install Rosetta 2
+      import_tasks: roles/apple-silicon/tasks/install-rosetta-2.yml
+      when: is_apple_silicon and homebrew.install_intel_homebrew
+
+    # Configure user
+    - name: Configure user
+      import_tasks: roles/common/tasks/configure-user.yml
+      when: user.configure
+
+    # Install Homebrew
+    - name: Uninstall Homebrew for Apple Silicon
+      file:
+        path: '{{ homebrew.arm_homebrew_location }}'
+        state: absent
+      when: not is_apple_silicon or not homebrew.install_arm_homebrew
+  
+    - name: Install Homebrew for Apple Silicon
+      import_tasks: roles/apple-silicon/tasks/install-homebrew.yml
+      when: is_apple_silicon and homebrew.install_arm_homebrew
+
+    - name: Uninstall Homebrew for Intel
+      file:
+        path: '{{ homebrew.intel_homebrew_location }}'
+        state: absent
+      when: not homebrew.install_intel_homebrew
+
+    - name: Install Homebrew for Intel
+      import_tasks: roles/intel/tasks/install-homebrew.yml
+      when: not is_apple_silicon and homebrew.install_intel_homebrew
+
+    - name: Install Homebrew for Intel (Rosetta)
+      import_tasks: roles/apple-silicon/tasks/install-homebrew-rosetta.yml
+      when: is_apple_silicon and homebrew.install_intel_homebrew
+
+    # ASDF Install and ASDF packages
+    - name: Install ASDF
+      import_tasks: roles/common/tasks/install-asdf.yml
+
+    - name: Install Direnv via ASDF
+      import_tasks: roles/common/tasks/install-asdf-direnv.yml
+
+    - name: Install NodeJS via ASDF
+      import_tasks: roles/common/tasks/install-asdf-nodejs.yml
+
+    - name: Install Python via ASDF
+      import_tasks: roles/common/tasks/install-asdf-python.yml
+
+    - name: Install Yarn via ASDF
+      import_tasks: roles/common/tasks/install-asdf-yarn.yml
+
+    - name: Install Kubectl via ASDF
+      import_tasks: roles/common/tasks/install-asdf-kubectl.yml
+
+    - name: Install Kubectx via ASDF
+      import_tasks: roles/common/tasks/install-asdf-kubectx.yml
+
+    # Install Helm
+    - name: Install Helm
+      import_tasks: roles/common/tasks/install-helm.yml
+
+    - name: Finish
+      debug:
+        msg: Install is complete, exit your terminal completely and re-open it for changes to apply.

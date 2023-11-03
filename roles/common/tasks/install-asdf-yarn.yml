@@ -1,0 +1,31 @@
+- name: Get package version
+  set_fact:
+    package_version: "{{ asdf.plugins | selectattr('name', 'equalto', 'yarn') | map(attribute='version') | first }}"
+
+- name: Install dependencies (Apple Silicon)
+  command:
+    cmd: '{{ homebrew.arm_homebrew_location }}/bin/brew install gnu-tar gpg'
+    creates: '/usr/bin/tar'
+  when: is_apple_silicon and homebrew.install_arm_homebrew
+
+- name: Install dependencies (Intel)
+  command:
+    cmd: '{{ homebrew.intel_homebrew_location }}/bin/brew install gnu-tar gpg'
+    creates: '/usr/bin/tar'
+  when: not is_apple_silicon and homebrew.install_intel_homebrew
+
+# Do we need to do this?
+# - name: Install dependencies (Rosetta x86_64)
+#   command:
+#     cmd: 'arch -x86_64 {{ homebrew.intel_homebrew_location }}/bin/brew install gnu-tar gpg'
+#   when: is_apple_silicon and homebrew.install_intel_homebrew
+
+- name: Add yarn via ASDF
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf plugin-add yarn'
+    creates: '/Users/{{ user.username }}/.asdf/plugins/yarn'
+
+- name: Install yarn {{package_version}}
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf install yarn {{package_version}}'
+    creates: '/Users/{{ user.username }}/.asdf/installs/yarn/{{package_version}}'

@@ -1,0 +1,35 @@
+# Set this to the password of the user you are running ansible as, so that ansible may elivate to root when needed.
+ansible_sudo_pass: ""
+
+user:
+  configure: true
+  username: maxwlang
+  install_p10k_theme: true # If you do this, you'll want to install a nerd font to your terminal.
+  install_home_files: true # This will copy the files in the files/user-home directory to the user's home directory.
+
+homebrew:
+  # Note: These are the default locations for Homebrew, we do not change them.
+  # This is defined here in case we need to change them in the future.
+  intel_homebrew_location: /usr/local/homebrew
+  arm_homebrew_location: /opt/homebrew
+
+  install_intel_homebrew: true # When running on Apple Silicon, this will install Rosetta 2 and Intel Homebrew.
+  install_arm_homebrew: true # Only has an effect on Apple Silicon machines.
+
+asdf:
+  version: v0.13.1
+  configure_global_tool_versions: true # This will copy the .tool-versions file to the user's home directory.
+  plugins:
+    # If you add something here, you will need to build a task to install it with ASDF too.
+    - name: direnv
+      version: 2.32.2
+    - name: nodejs
+      version: 18.14.0
+    - name: python
+      version: 3.11.6
+    - name: yarn
+      version: 1.22.19
+    - name: kubectl
+      version: 1.28.2
+    - name: kubectx
+      version: 0.9.5

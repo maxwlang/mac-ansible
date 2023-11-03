@@ -1,0 +1,32 @@
+{% if user.install_p10k_theme %}
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+{% endif %}
+
+export ZSH="$HOME/.oh-my-zsh"
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+
+[[ ! -f ~/.zprofile ]] || source ~/.zprofile
+
+{% if user.install_p10k_theme %}
+source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel9k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+{% endif %}
+
+{% if is_apple_silicon and homebrew.install_intel_homebrew and homebrew.install_arm_homebrew %}
+source ~/.brewtoggle.zsh
+{% elif is_apple_silicon and homebrew.install_arm_homebrew and not homebrew.install_intel_homebrew %}
+eval "$({{ homebrew.arm_homebrew_location }}/bin/brew shellenv)"
+alias brew='{{ homebrew.arm_homebrew_location }}/bin/brew'
+{% elif is_apple_silicon and homebrew.install_intel_homebrew and not homebrew.install_arm_homebrew %}
+eval "$({{ homebrew.intel_homebrew_location }}/bin/brew shellenv)"
+alias brew='{{ homebrew.intel_homebrew_location }}/bin/brew'
+{% elif not is_apple_silicon and homebrew.install_intel_homebrew %}
+eval "$({{ homebrew.intel_homebrew_location }}/bin/brew shellenv)"
+alias brew='{{ homebrew.intel_homebrew_location }}/bin/brew'
+{% endif %}

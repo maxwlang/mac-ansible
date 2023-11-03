@@ -1,0 +1,11 @@
+- name: Download Homebrew (Apple Silicon)
+  get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+    dest: /tmp/homebrew-installer.sh
+    mode: 0755
+
+- name: Install Homebrew (Apple Silicon)
+  become: true
+  command:
+    cmd: 'su - {{ user.username }} -c "NONINTERACTIVE=1 CI=1 /tmp/homebrew-installer.sh"'
+    creates: '{{ homebrew.arm_homebrew_location }}/bin/brew'

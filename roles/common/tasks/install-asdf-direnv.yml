@@ -1,0 +1,25 @@
+- name: Get package version
+  set_fact:
+    package_version: "{{ asdf.plugins | selectattr('name', 'equalto', 'direnv') | map(attribute='version') | first }}"
+
+- name: Add direnv plugin to ASDF
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf plugin-add direnv'
+    creates: '/Users/{{ user.username }}/.asdf/plugins/direnv'
+
+- name: Install direnv {{package_version}}
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf direnv setup --no-touch-rc-file --shell zshrc --version latest'
+    creates: '/Users/{{ user.username }}/.config/asdf-direnv/zshrc'
+
+- name: Add direnv to .zshrc
+  lineinfile:
+    dest: ~/.zshrc
+    line: 'source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"'
+    insertafter: EOF
+    state: present
+
+- name: Install direnv via asdf
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf install direnv {{package_version}}'
+    creates: '/Users/{{ user.username }}/.asdf/installs/direnv/{{package_version}}'

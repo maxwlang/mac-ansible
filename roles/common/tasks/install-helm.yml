@@ -1,0 +1,11 @@
+- name: Install Helm (Apple Silicon)
+  command:
+    cmd: '{{ homebrew.arm_homebrew_location }}/bin/brew install helm'
+    creates: '{{ homebrew.arm_homebrew_location }}/bin/helm'
+  when: is_apple_silicon and homebrew.install_arm_homebrew
+
+- name: Install Helm (Intel)
+  command:
+    cmd: '{{ homebrew.intel_homebrew_location }}/bin/brew install helm'
+    creates: '{{ homebrew.intel_homebrew_location }}/bin/helm'
+  when: not is_apple_silicon and homebrew.install_intel_homebrew

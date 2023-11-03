@@ -1,0 +1,13 @@
+- name: Get package version
+  set_fact:
+    package_version: "{{ asdf.plugins | selectattr('name', 'equalto', 'python') | map(attribute='version') | first }}"
+
+- name: Add python via ASDF
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf plugin-add python'
+    creates: '/Users/{{ user.username }}/.asdf/plugins/python'
+
+- name: Install python {{package_version}}
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf install python {{package_version}}'
+    creates: '/Users/{{ user.username }}/.asdf/installs/python/{{package_version}}'

@@ -1,0 +1,11 @@
+- name: Download Homebrew (Intel)
+  get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+    dest: /tmp/homebrew-installer.sh
+    mode: 0755
+
+- name: Install Homebrew (Intel)
+  become: true
+  command:
+    cmd: 'su - {{ user.username }} -c "NONINTERACTIVE=1 CI=1 /tmp/homebrew-installer.sh"'
+    creates: '{{ homebrew.intel_homebrew_location }}/bin/brew'

@@ -1,0 +1,19 @@
+- name: Clone asdf to '/Users/{{ user.username }}/.asdf'
+  git:
+    repo: https://github.com/asdf-vm/asdf.git
+    dest: /Users/{{ user.username }}/.asdf
+    single_branch: yes
+    version: '{{ asdf.version }}'
+
+- name: Add asdf to .zshrc (Oh My Zsh)
+  lineinfile:
+    dest: /Users/{{ user.username }}/.zshrc
+    line: 'plugins=("$plugins" asdf)'
+    insertafter: '^plugins=\(git\)\n'
+    state: present
+
+- name: Configure .tool-versions
+  template:
+    src: "../templates/.tool-versions.j2"
+    dest: "/Users/{{ user.username }}/.tool-versions"
+  when: asdf.configure_global_tool_versions

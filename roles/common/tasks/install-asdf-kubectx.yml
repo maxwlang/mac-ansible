@@ -1,0 +1,13 @@
+- name: Get package version
+  set_fact:
+    package_version: "{{ asdf.plugins | selectattr('name', 'equalto', 'kubectx') | map(attribute='version') | first }}"
+
+- name: Add kubectx to ASDF
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf plugin-add kubectx https://github.com/virtualstaticvoid/asdf-kubectx.git'
+    creates: '/Users/{{ user.username }}/.asdf/plugins/kubectx'
+
+- name: Install kubectx {{package_version}}
+  command:
+    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf install kubectx {{package_version}}'
+    creates: '/Users/{{ user.username }}/.asdf/installs/kubectx/{{package_version}}'
