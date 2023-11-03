@@ -1,0 +1,4 @@
+.DS_Store
+
+roles/common/files/user-home/.zshrc
+roles/common/files/user-home/.brewtoggle.zsh
