@@ -4,17 +4,17 @@
     dest: /tmp/zsh-installer.sh
     mode: 0755
 
-- name: Install ohmyzsh for '{{ user.username }}'
+- name: Install ohmyzsh for '{{ ansible_user_id }}'
   become: true
   command:
-    cmd: 'su - {{ user.username }} -c "/tmp/zsh-installer.sh \"\" --unattended"'
-    creates: /Users/{{ user.username }}/.oh-my-zsh
+    cmd: 'su - {{ ansible_user_id }} -c "/tmp/zsh-installer.sh \"\" --unattended"'
+    creates: /Users/{{ ansible_user_id }}/.oh-my-zsh
 
-- name: Install powerlevel10k for '{{ user.username }}'
+- name: Install powerlevel10k for '{{ ansible_user_id }}'
   become: true
   command:
-    cmd: 'su - {{ user.username }} -c "git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /Users/{{ user.username }}/.oh-my-zsh/custom/themes/powerlevel10k"'
-    creates: /Users/{{ user.username }}/.oh-my-zsh/custom/themes/powerlevel10k
+    cmd: 'su - {{ ansible_user_id }} -c "git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /Users/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k"'
+    creates: /Users/{{ ansible_user_id }}/.oh-my-zsh/custom/themes/powerlevel10k
   when: user.install_p10k_theme
 
 - name: Remove generated .zshrc
@@ -27,29 +27,11 @@
     src: "../templates/.zshrc.j2"
     dest: "roles/common/files/user-home/.zshrc"
 
-- name: Remove generated .brewtoggle.zsh
-  file:
-    path: "roles/common/files/user-home/.brewtoggle.zsh"
-    state: absent
-  when: is_apple_silicon and homebrew.install_intel_homebrew and homebrew.install_arm_homebrew
-
-- name: Remove generated .brewtoggle.zsh in home directory
-  file:
-    path: "/Users/{{ user.username }}/.brewtoggle.zsh"
-    state: absent
-  when: not (is_apple_silicon and homebrew.install_intel_homebrew and homebrew.install_arm_homebrew)
-
-- name: Build .brewtoggle.zsh
-  template:
-    src: "../templates/.brewtoggle.zsh.j2"
-    dest: "roles/common/files/user-home/.brewtoggle.zsh"
-  when: is_apple_silicon and homebrew.install_intel_homebrew and homebrew.install_arm_homebrew
-
-- name: Add home files to '{{ user.username }}'
+- name: Add home files to '{{ ansible_user_id }}'
   copy:
     src: "{{ item }}"
-    dest: "/Users/{{ user.username }}/{{ item | basename }}"
-    owner: '{{ user.username }}'
+    dest: "/Users/{{ ansible_user_id }}/{{ item | basename }}"
+    owner: '{{ ansible_user_id }}'
     mode: '644'
   with_fileglob:
     - "../files/user-home/.*"

@@ -18,15 +18,10 @@ source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel9k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 {% endif %}
 
-{% if is_apple_silicon and homebrew.install_intel_homebrew and homebrew.install_arm_homebrew %}
-source ~/.brewtoggle.zsh
-{% elif is_apple_silicon and homebrew.install_arm_homebrew and not homebrew.install_intel_homebrew %}
-eval "$({{ homebrew.arm_homebrew_location }}/bin/brew shellenv)"
-alias brew='{{ homebrew.arm_homebrew_location }}/bin/brew'
-{% elif is_apple_silicon and homebrew.install_intel_homebrew and not homebrew.install_arm_homebrew %}
-eval "$({{ homebrew.intel_homebrew_location }}/bin/brew shellenv)"
-alias brew='{{ homebrew.intel_homebrew_location }}/bin/brew'
-{% elif not is_apple_silicon and homebrew.install_intel_homebrew %}
-eval "$({{ homebrew.intel_homebrew_location }}/bin/brew shellenv)"
-alias brew='{{ homebrew.intel_homebrew_location }}/bin/brew'
+{% if homebrew.install_homebrew %}
+eval "$({{ homebrew.homebrew_location }}/bin/brew shellenv)"
+alias brew='{{ homebrew.homebrew_location }}/bin/brew'
 {% endif %}
+
+export ASDF_DATA_DIR="/Users/{{ ansible_user_id }}/.asdf"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"

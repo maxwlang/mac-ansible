@@ -1,4 +1,4 @@
-- name: Install Rosetta 2
+- name: Install Rosetta
   command:
     cmd: softwareupdate --install-rosetta --agree-to-license
     creates: /usr/libexec/rosetta/runtime

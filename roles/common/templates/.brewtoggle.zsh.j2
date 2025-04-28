@@ -1,9 +1,0 @@
-alias mzsh="arch -arm64 /bin/zsh"
-alias izsh="arch -x86_64 /bin/zsh"
-if [ "$(uname -p)" = "i386" ]; then
-  eval "$({{ homebrew.intel_homebrew_location }}/bin/brew shellenv)"
-  alias brew='{{ homebrew.intel_homebrew_location }}/bin/brew'
-else
-  eval "$({{ homebrew.arm_homebrew_location }}/bin/brew shellenv)"
-  alias brew='{{ homebrew.arm_homebrew_location }}/bin/brew'
-fi

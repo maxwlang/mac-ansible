@@ -8,4 +8,4 @@
 Change settings in settings.yml, provide sudo password.
 
 3. Run playbook
-`ansible-playbook --connection=local playbook.yml`
+`ansible-playbook --connection=local --ask-become-pass playbook.yml`

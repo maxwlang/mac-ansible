@@ -4,13 +4,13 @@
 
 - name: Add direnv plugin to ASDF
   command:
-    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf plugin-add direnv'
-    creates: '/Users/{{ user.username }}/.asdf/plugins/direnv'
+    cmd: '{{ homebrew.homebrew_location }}/bin/asdf plugin add direnv'
+    creates: '/Users/{{ ansible_user_id }}/.asdf/plugins/direnv'
 
 - name: Install direnv {{package_version}}
   command:
-    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf direnv setup --no-touch-rc-file --shell zshrc --version latest'
-    creates: '/Users/{{ user.username }}/.config/asdf-direnv/zshrc'
+    cmd: '{{ homebrew.homebrew_location }}/bin/asdf direnv setup --no-touch-rc-file --shell zshrc --version latest'
+    creates: '/Users/{{ ansible_user_id }}/.config/asdf-direnv/zshrc'
 
 - name: Add direnv to .zshrc
   lineinfile:
@@ -21,5 +21,5 @@
 
 - name: Install direnv via asdf
   command:
-    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf install direnv {{package_version}}'
-    creates: '/Users/{{ user.username }}/.asdf/installs/direnv/{{package_version}}'
+    cmd: '{{ homebrew.homebrew_location }}/bin/asdf install direnv {{package_version}}'
+    creates: '/Users/{{ ansible_user_id }}/.asdf/installs/direnv/{{package_version}}'

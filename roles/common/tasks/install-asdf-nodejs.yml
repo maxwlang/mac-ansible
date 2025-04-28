@@ -4,10 +4,10 @@
 
 - name: Add nodejs via ASDF
   command:
-    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git'
-    creates: '/Users/{{ user.username }}/.asdf/plugins/nodejs'
+    cmd: '{{ homebrew.homebrew_location }}/bin/asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git'
+    creates: '/Users/{{ ansible_user_id }}/.asdf/plugins/nodejs'
 
 - name: Install nodejs {{package_version}}
   command:
-    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf install nodejs {{package_version}}'
-    creates: '/Users/{{ user.username }}/.asdf/installs/nodejs/{{package_version}}'
+    cmd: '{{ homebrew.homebrew_location }}/bin/asdf install nodejs {{package_version}}'
+    creates: '/Users/{{ ansible_user_id }}/.asdf/installs/nodejs/{{package_version}}'

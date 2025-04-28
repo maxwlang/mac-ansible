@@ -1,0 +1,11 @@
+- name: Download Homebrew
+  get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+    dest: /tmp/homebrew-installer.sh
+    mode: 0755
+
+- name: Install Homebrew
+  become: true
+  command:
+    cmd: 'su - {{ ansible_user_id }} -c "NONINTERACTIVE=1 CI=1 /tmp/homebrew-installer.sh"'
+    creates: '{{ homebrew.homebrew_location }}/bin/brew'

@@ -4,10 +4,10 @@
 
 - name: Add kubectl to ASDF
   command:
-    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf plugin-add kubectl https://github.com/asdf-community/asdf-kubectl.git'
-    creates: '/Users/{{ user.username }}/.asdf/plugins/kubectl'
+    cmd: '{{ homebrew.homebrew_location }}/bin/asdf plugin add kubectl https://github.com/asdf-community/asdf-kubectl.git'
+    creates: '/Users/{{ ansible_user_id }}/.asdf/plugins/kubectl'
 
 - name: Install kubectl {{package_version}}
   command:
-    cmd: '/Users/{{ user.username }}/.asdf/bin/asdf install kubectl {{package_version}}'
-    creates: '/Users/{{ user.username }}/.asdf/installs/kubectl/{{package_version}}'
+    cmd: '{{ homebrew.homebrew_location }}/bin/asdf install kubectl {{package_version}}'
+    creates: '/Users/{{ ansible_user_id }}/.asdf/installs/kubectl/{{package_version}}'
