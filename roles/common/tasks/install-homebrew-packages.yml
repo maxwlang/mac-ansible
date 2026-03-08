@@ -1,7 +1,8 @@
 - name: Install Homebrew packages
-  community.general.homebrew:
-    name: '{{ item.name }}'
-    state: present
-    path: '{{ homebrew.homebrew_location }}/bin'
+  command:
+    cmd: '{{ homebrew.homebrew_location }}/bin/brew install {{ item.name }}'
   loop: '{{ homebrew.packages }}'
   when: homebrew.packages is defined
+  register: brew_install
+  changed_when: "'already installed' not in brew_install.stderr"
+  failed_when: brew_install.rc != 0 and 'already installed' not in brew_install.stderr
