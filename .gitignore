@@ -3,3 +3,5 @@
 roles/common/files/user-home/.zshrc
 roles/common/files/user-home/.zprofile
 roles/common/files/user-home/mise.toml
+
+settings.yml
