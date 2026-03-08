@@ -1,0 +1,46 @@
+- name: Install Mise
+  command:
+    cmd: '{{ homebrew.homebrew_location }}/bin/brew install mise'
+    creates: '{{ homebrew.homebrew_location }}/bin/mise'
+  when: homebrew.install_homebrew
+
+- name: Ensure mise config directory exists
+  file:
+    path: '/Users/{{ ansible_user_id }}/.config/mise'
+    state: directory
+    owner: '{{ ansible_user_id }}'
+    mode: '0755'
+
+- name: Remove generated mise.toml
+  file:
+    path: roles/common/files/user-home/mise.toml
+    state: absent
+  when: mise.configure_global_config
+
+- name: Build mise.toml
+  template:
+    src: "../templates/mise.toml.j2"
+    dest: "roles/common/files/user-home/mise.toml"
+  when: mise.configure_global_config
+
+- name: Remove mise from user home directory
+  file:
+    path: '/Users/{{ ansible_user_id }}/mise.toml'
+    state: absent
+  when: mise.configure_global_config
+
+- name: Copy mise.toml to config directory
+  copy:
+    src: "roles/common/files/user-home/mise.toml"
+    dest: '/Users/{{ ansible_user_id }}/.config/mise/mise.toml'
+    owner: '{{ ansible_user_id }}'
+    mode: '0644'
+  when: mise.configure_global_config
+
+- name: Install tools via Mise
+  command:
+    cmd: '{{ homebrew.homebrew_location }}/bin/mise install'
+  environment:
+    MISE_CONFIG_FILE: '/Users/{{ ansible_user_id }}/.config/mise/mise.toml'
+  when: mise.configure_global_config and mise.install_tools
+  changed_when: false

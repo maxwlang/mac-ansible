@@ -1,0 +1,30 @@
+# Created by pipx
+export PATH="$PATH:/Users/maxlang/Library/Python/3.9/bin"
+export PATH="$PATH:/Users/maxlang/.local/bin"
+
+# Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Helper Functions
+function xLog() {
+  echo "Executing: $@"
+  eval "$@"
+}
+
+{% if user.git_switch.include %}
+function git-switch() {
+{% for alias in user.git_switch.aliases %}
+{% if loop.first %}
+    if [ "$1" = "{{ alias.email | lower | split('@') | first }}" ]; then
+{% else %}
+    elif [ "$1" = "{{ alias.email | lower | split('@') | first }}" ]; then
+{% endif %}
+        xLog "git config --local --replace-all user.name '{{ alias.name }}'"
+        xLog "git config --local --replace-all user.email '{{ alias.email }}'"
+        xLog "git config --local --replace-all core.sshCommand 'ssh -i {{ alias.private_key_path }} -F /dev/null'"
+{% endfor %}
+    else
+        echo "Usage: git-switch [{{ user.git_switch.aliases | map(attribute='email') | map('lower') | map('split', '@') | map('first') | join('|') }}]"
+    fi
+}
+{% endif %}

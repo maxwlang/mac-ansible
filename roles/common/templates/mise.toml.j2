@@ -1,0 +1,7 @@
+[settings]
+env_file = ".env.local"
+
+[tools]
+{% for tool in mise.tools %}
+{{ tool.name }} = "{{ tool.version }}"
+{% endfor %}

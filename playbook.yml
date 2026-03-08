@@ -22,43 +22,22 @@
       when: user.configure
 
     # Install Homebrew
-    - name: Uninstall Homebrew 
-      file:
-        path: '{{ homebrew.homebrew_location }}'
-        state: absent
-      when: not homebrew.install_homebrew
-  
     - name: Install Homebrew 
       import_tasks: roles/common/tasks/install-homebrew.yml
       when: homebrew.install_homebrew
 
     - name: Install Rosetta 2
       import_tasks: roles/common/tasks/install-rosetta.yml
+      when: user.install_rosetta
 
     # Install packages
-    - name: Install ASDF
-      import_tasks: roles/common/tasks/install-asdf.yml
+    - name: Install Mise
+      import_tasks: roles/common/tasks/install-mise.yml
+      when: homebrew.install_homebrew and mise.install_mise
 
-    - name: Install Direnv via ASDF
-      import_tasks: roles/common/tasks/install-asdf-direnv.yml
-
-    - name: Install NodeJS via ASDF
-      import_tasks: roles/common/tasks/install-asdf-nodejs.yml
-
-    - name: Install Python via ASDF
-      import_tasks: roles/common/tasks/install-asdf-python.yml
-
-    - name: Install Kubectl via ASDF
-      import_tasks: roles/common/tasks/install-asdf-kubectl.yml
-
-    - name: Install Kubectx via ASDF
-      import_tasks: roles/common/tasks/install-asdf-kubectx.yml
-
-    - name: Install Helm
-      import_tasks: roles/common/tasks/install-helm.yml
-
-    - name: Install Yarn via ASDF
-      import_tasks: roles/common/tasks/install-asdf-yarn.yml
+    - name: Install Homebrew packages
+      import_tasks: roles/common/tasks/install-homebrew-packages.yml
+      when: homebrew.install_homebrew and homebrew.install_packages
 
     - name: Finish
       debug:

@@ -1,5 +1,0 @@
-- name: Install ASDF
-  command:
-    cmd: '{{ homebrew.homebrew_location }}/bin/brew install asdf'
-    creates: '{{ homebrew.homebrew_location }}/bin/asdf'
-  when: homebrew.install_homebrew

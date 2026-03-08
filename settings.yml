@@ -2,24 +2,38 @@ user:
   configure: true
   install_p10k_theme: true # If you do this, you'll want to install a nerd font to your terminal.
   install_home_files: true # This will copy the files in the files/user-home directory to the user's home directory.
+  install_rosetta: true # This will install Rosetta 2, which is required for running x86_64 software on Apple Silicon.
+  git_switch:
+    include: true # This will include the git-switch command, a tool for quickly switching between git aliases
+    aliases:
+      - name: 'Alice Bobardi'
+        email: 'alice@example.com'
+        private_key_path: '~/.ssh/id_rsa_alice'
+      - name: 'Bob Smith'
+        email: 'bob@example.com'
+        private_key_path: '~/.ssh/id_rsa_bob'
 
 homebrew:
-  homebrew_location: /opt/homebrew
   install_homebrew: true
+  install_packages: true
+  homebrew_location: /opt/homebrew
+  packages:
+    - name: ffmpeg
 
-asdf:
-  configure_global_tool_versions: true # This will copy the .tool-versions file to the user's home directory.
-  plugins:
-    # If you add something here, you will need to build a task to install it with ASDF too.
-    - name: direnv
-      version: 2.36.0
-    - name: nodejs
-      version: 22.15.0
+mise:
+  install_mise: true # This will install Mise, a tool for managing multiple versions of programming languages and tools.
+  configure_global_config: true # This will create mise.toml in ~/.config/mise/
+  install_tools: true # This will install the tools specified in the tools list below.
+  tools:
+    - name: node
+      version: "24"
     - name: python
-      version: 3.13.3
+      version: "3"
     - name: yarn
-      version: 1.22.19
+      version: "1"
     - name: kubectl
-      version: 1.28.2
+      version: "latest"
     - name: kubectx
-      version: 0.9.5
+      version: "latest"
+    - name: helm
+      version: "latest"

@@ -27,6 +27,11 @@
     src: "../templates/.zshrc.j2"
     dest: "roles/common/files/user-home/.zshrc"
 
+- name: Build .zprofile
+  template:
+    src: "../templates/.zprofile.j2"
+    dest: "roles/common/files/user-home/.zprofile"
+
 - name: Add home files to '{{ ansible_user_id }}'
   copy:
     src: "{{ item }}"

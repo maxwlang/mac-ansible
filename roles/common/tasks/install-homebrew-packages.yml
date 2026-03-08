@@ -1,0 +1,4 @@
+- name: Install ffmpeg
+  command:
+    cmd: '{{ homebrew.homebrew_location }}/bin/brew install ffmpeg'
+    creates: '{{ homebrew.homebrew_location }}/bin/ffmpeg'

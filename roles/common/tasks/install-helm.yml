@@ -1,5 +1,0 @@
-- name: Install Helm
-  command:
-    cmd: '{{ homebrew.homebrew_location }}/bin/brew install helm'
-    creates: '{{ homebrew.homebrew_location }}/bin/helm'
-  when: homebrew.install_homebrew

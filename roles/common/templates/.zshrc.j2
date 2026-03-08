@@ -21,7 +21,7 @@ source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel9k.zsh-theme
 {% if homebrew.install_homebrew %}
 eval "$({{ homebrew.homebrew_location }}/bin/brew shellenv)"
 alias brew='{{ homebrew.homebrew_location }}/bin/brew'
+{% if mise.install_mise %}
+eval "$({{ homebrew.homebrew_location }}/bin/mise activate zsh)"
 {% endif %}
-
-export ASDF_DATA_DIR="/Users/{{ ansible_user_id }}/.asdf"
-export PATH="$ASDF_DATA_DIR/shims:$PATH"
+{% endif %}
