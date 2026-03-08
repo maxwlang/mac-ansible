@@ -1,4 +1,7 @@
-- name: Install ffmpeg
-  command:
-    cmd: '{{ homebrew.homebrew_location }}/bin/brew install ffmpeg'
-    creates: '{{ homebrew.homebrew_location }}/bin/ffmpeg'
+- name: Install Homebrew packages
+  community.general.homebrew:
+    name: '{{ item.name }}'
+    state: present
+    path: '{{ homebrew.homebrew_location }}/bin'
+  loop: '{{ homebrew.packages }}'
+  when: homebrew.packages is defined
